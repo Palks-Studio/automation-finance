@@ -23,6 +23,28 @@ The system provides:
 - revenue export to CSV (accounting-ready)  
 - reliable yearly invoice numbering
 
+It is **not** a certified accounting software and does not replace:  
+
+- a certified accountant  
+- a regulated accounting software  
+- nor any legal tax or reporting obligations
+
+The data produced by this system is intended for **internal and operational** use only.
+
+---
+
+## What this repository is not
+
+This repository does not provide:  
+
+- a user interface  
+- a ready-to-use SaaS product  
+- a certified invoicing system  
+- an automated payment processing system
+
+It is a **documented technical architecture**,  
+designed to illustrate a robust and autonomous automation approach.
+
 ---
 
 ## Core principles
@@ -46,53 +68,89 @@ This system is designed to be:
 
 ```
 automation/
+│
+├── run_automation.php              → Moteur d’orchestration global de l’automatisation (FR)
+│                                   → Global automation orchestration engine (EN)
 ├── engine/
-│   ├── run.php                 → Moteur principal d’automatisation (cron / CLI) (FR)
-│   │                           → Main automation engine (cron / CLI) (EN)
+│   ├── run.php                     → Moteur principal d’automatisation (cron / CLI) (FR)
+│   │                               → Main automation engine (cron / CLI) (EN)
 │   │
-│   ├── vendor/                 → Dépendances PHP (ex: DomPDF) (FR)
-│   │                           → PHP dependencies (e.g. DomPDF) (EN)
+│   ├── run_batch.php               → Moteur d’automatisation BATCH pour la facturation clients (FR)
+│   │                               → Batch automation engine for client invoicing (EN)
 │   │
-│   ├── mailer.php              → Envoi des emails avec facture en pièce jointe (FR)
-│   │                           → Email sender with invoice attachment (EN)
+│   ├── vendor/                     → Dépendances PHP (ex: DomPDF) (FR)
+│   │                               → PHP dependencies (e.g. DomPDF) (EN)
 │   │
+│   ├── alerts                      → Gestion des alertes et notifications d’exécution (FR)
+│   │                               → Execution alerts and notifications handling (EN)
+│   │
+│   ├── import_cvs.php              → Import et validation des fichiers CSV clients (FR)
+│   │                               → Client CSV import and validation handler (EN)
+│   │
+│   ├── mailer.php                  → Envoi des emails avec facture en pièce jointe (FR)
+│   │                               → Email sender with invoice attachment (EN)
 │   └── templates/
-│       └── invoice.html.php    → Template PDF de facture (bilingue FR / EN) (FR)
-│                               → Invoice PDF template (bilingual FR / EN) (EN)
-│
+│       ├── invoice.html.php        → Template PDF de facture (bilingue FR / EN) (FR)
+│       │                           → Invoice PDF template (bilingual FR / EN) (EN)
+│       │
+│       └── invoices_batch.html.php → Facture CLIENTS (batch) (FR)
+│                                   → Client Invoices (Batch) (EN)
 ├── clients/
-│   └── client_xxx.php          → Fiche client (seul fichier à modifier par client) (FR)
-│                               → Client configuration file (only file to edit per client) (EN)
-│
+│   └── client_xxx.php              → Fiche client (seul fichier à modifier par client) (FR)
+│                                   → Client configuration file (only file to edit per client) (EN)
+├── batch_clients/
+│   └── client_xxx.php              → Configuration batch d’un client final (facturation mensuelle) (FR)
+│                                   → Batch configuration for an end client (monthly invoicing) (EN)
 ├── data/
 │   ├── logs/
-│   │   └── xxx.log             → Logs d’exécution par client (FR)
-│   │                           → Execution logs per client (EN)
-│   │
+│   │   └── xxx.log                 → Logs d’exécution par client (FR)
+│   │                               → Execution logs per client (EN)
 │   ├── revenues/
-│   │   └── xxx.json            → Recettes cumulées (source comptable interne) (FR)
-│   │                           → Cumulative revenues (internal accounting source) (EN)
-│   │
+│   │   └── xxx.json                → Recettes cumulées (source comptable interne) (FR)
+│   │                               → Cumulative revenues (internal accounting source) (EN)
+│   ├── payments/
+│   │   └── xxx.json                → Paiements reçus du client (virements, montants réellement encaissés) (FR)
+│   │                               → Payments received from the client (bank transfers, actually received amounts) (EN)
+│   ├── balance/
+│   │   └── xxx.json                → Solde comptable du client (facturé vs payé, statut payé / impayé) (FR)
+│   │                               → Client accounting balance (invoiced vs paid, paid / unpaid status) (EN)
 │   ├── invoices/
-│   │   └── xxx-2025-001.pdf    → Factures générées et archivées par client (FR)
-│   │                           → Generated and archived invoices per client (EN)
-│   │
-│   └── counters/
-│       └── xxx.json            → Compteur annuel de factures par client (FR)
-│                               → Annual invoice counter per client (EN)
-│
+│   │   └── client/                 → Factures de l’activité principale (facturation directe, usage interne) (FR)
+│   │                               → Invoices from the main activity (direct invoicing, internal use) (EN)
+│   ├── invoices_batch/
+│   │   └── client/                 → Factures générées dans le cadre du service batch (clients finaux) (FR)
+│   │                               → Invoices generated as part of the batch service (end clients) (EN)
+│   ├── inbox_batch/
+│   │   └── batch.csv               → Fichier CSV fourni par le client (source de facturation batch) (FR)
+│   │                               → Client-provided CSV file (batch invoicing source) (EN)
+│   ├── counters/
+│   │   └── xxx.json                → Compteur annuel de factures par client (facturation directe) (FR)
+│   │                               → Annual invoice counter per client (direct invoicing) (EN)
+│   └── counters_batch/
+│       └── xxx.json                → Compteur annuel de factures par client (facturation batch) (FR)
+│                                   → Annual invoice counter per client (batch invoicing) (EN)
+├── docs/
+│       └── format_csv.md           → Spécification officielle du format CSV attendu (FR)
+│                                   → Official specification of the expected CSV format (EN)
 ├── tools/
-│   └── export_revenues_csv.php → Export des recettes au format CSV (comptabilité) (FR)
-│                               → Revenue export to CSV format (accounting) (EN)
+│   ├── update_balances.php         → Met à jour les soldes clients à partir des recettes et des paiements (FR)
+│   │                               → Updates client balances based on revenues and payments (EN)
+│   │
+│   └── export_revenues_csv.php     → Script PHP d’export des recettes vers un fichier CSV (comptabilité) (FR)
+│                                   → PHP script to export revenues to a CSV file (accounting) (EN)
+├── exports/
+│   └── export_revenues.csv         → Fichier CSV contenant les recettes exportées (données tabulaires) (FR)
+│                                   → CSV file containing exported revenues (tabular data) (EN)
+├── downloads/
+│   └── *.zip                       → Archives ZIP mensuelles par client, contenant les factures PDF générées automatiquement (FR)
+│                                   → Monthly ZIP archives per client, containing automatically generated PDF invoices (EN)
 │
-├── LICENSE.md                  → Terms of use and legal Framework
+├── LICENSE.md                      → Conditions d’utilisation et cadre légal (FR)
+│                                   → Terms of use and legal Framework (EN)
 │
-└── README.md                   → Documentation générale du système (FR)
-                                → General system documentation (EN)
+└── README.md                       → Documentation générale du système (FR)
+                                    → General system documentation (EN)
 ```
-
-
----
 
 
 ---
@@ -195,6 +253,113 @@ It generates CSV files usable by:
 
 CSV files can be deleted and regenerated at any time  
 (with no impact on source data).
+
+---
+
+## Real monthly cycle (invoicing & payments)
+
+The system operates on a simple and predictable monthly cycle.
+
+### Before the 15th of the month
+
+Clients make their payment (bank transfer).  
+No emails are automatically sent before this date.
+
+### On the 13th or 14th of the month (quick manual check)
+
+Check received payments on the bank account.
+
+Update the files in `data/payments/`:  
+
+- one file per client  
+- empty if no payment was received  
+- filled if a payment was received
+
+### Accounting update
+
+Run the following script from the command line:
+
+```bash
+php tools/update_balances.php
+```
+
+
+This script:  
+
+- compares invoiced amounts vs paid amounts  
+- computes the balance  
+- automatically sets the status to `paid` or `unpaid`
+
+The results are written to:
+
+```bash
+data/balance/{client_id}.json
+```
+
+
+### On the 15th of the month
+
+Invoices are automatically generated.
+
+Emails are sent only if:  
+
+- the client is active  
+- `options.auto_send = true`  
+- the script is executed on the 15th
+
+No email is sent outside of this date.
+
+---
+
+## Email sending rules
+
+Invoice email delivery is strictly controlled.
+
+All of the following conditions must be met for an email to be sent:  
+
+- the client is active (`active = true`)  
+- `options.auto_send = true`  
+- the script is executed on the 15th of the month  
+- execution is done via CLI (cron)
+
+This rule is deliberately enforced in `mailer.php`  
+to prevent any accidental or out-of-cycle email delivery.
+
+---
+
+## Batch invoicing (client service)
+
+The system includes a batch invoicing engine designed for clients
+who provide their own billing data via CSV files.
+
+How it works:  
+
+- one CSV file per client  
+- one CSV row = one PDF invoice  
+- automatic invoice generation  
+- monthly grouping into a ZIP archive  
+- email delivery of the download link (optional)
+
+Related script:
+
+```bash
+engine/run_batch.php
+```
+
+
+Important rules:  
+
+- PDF invoices are always generated  
+- sending (ZIP + email) depends only on `options.auto_send`  
+- sending is restricted to the 15th of the month  
+- one send per client per month (anti-duplicate safeguard)
+
+The expected CSV format is documented in:  
+
+`docs/format_csv.md`
+
+This document is intended for internal use  
+or for a supervised technical client.
 
 ---
 
