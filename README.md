@@ -74,6 +74,9 @@ automation/
 ├── engine/
 │   ├── run.php                     → Moteur principal d’automatisation (cron / CLI) (FR)
 │   │                               → Main automation engine (cron / CLI) (EN)
+│   │ 
+│   ├── export_accounting_year.php  → Export annuel des recettes (FR)
+│   │                               → Annual revenue export (EN)
 │   │
 │   ├── billing_rules.php           → Règles de facturation et de tarification dynamique (FR)
 │   │                               → Billing rules and dynamic pricing logic (EN)
