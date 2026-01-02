@@ -75,6 +75,9 @@ automation/
 │   ├── run.php                     → Moteur principal d’automatisation (cron / CLI) (FR)
 │   │                               → Main automation engine (cron / CLI) (EN)
 │   │
+│   ├── billing_rules.php           → Règles de facturation et de tarification dynamique (FR)
+│   │                               → Billing rules and dynamic pricing logic (EN)
+│   │
 │   ├── run_batch.php               → Moteur d’automatisation BATCH pour la facturation clients (FR)
 │   │                               → Batch automation engine for client invoicing (EN)
 │   │
@@ -105,6 +108,9 @@ automation/
 │   ├── logs/
 │   │   └── xxx.log                 → Logs d’exécution par client (FR)
 │   │                               → Execution logs per client (EN)
+│   ├── usage/
+│   │   └── xxx.json                → Suivi d’usage mensuel par client (FR)
+│   │                               → Monthly client usage tracking (EN)
 │   ├── revenues/
 │   │   └── xxx.json                → Recettes cumulées (source comptable interne) (FR)
 │   │                               → Cumulative revenues (internal accounting source) (EN)
