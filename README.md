@@ -111,6 +111,9 @@ automation/
 │   ├── logs/
 │   │   └── xxx.log                 → Logs d’exécution par client (FR)
 │   │                               → Execution logs per client (EN)
+│   ├── archive_batch/
+│   │   └── xxx.csv                 → CSV client archivé (FR)
+│   │                               → Archived client CSV (EN)
 │   ├── usage/
 │   │   └── xxx.json                → Suivi d’usage mensuel par client (FR)
 │   │                               → Monthly client usage tracking (EN)
