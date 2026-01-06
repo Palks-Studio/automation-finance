@@ -69,8 +69,6 @@ Ce système est conçu pour être :
 ```
 automation/
 │
-├── run_automation.php              → Moteur d’orchestration global de l’automatisation (FR)
-│                                   → Global automation orchestration engine (EN)
 ├── engine/
 │   ├── run.php                     → Moteur principal d’automatisation (cron / CLI) (FR)
 │   │                               → Main automation engine (cron / CLI) (EN)
@@ -147,6 +145,9 @@ automation/
 ├── tools/
 │   ├── update_balances.php         → Met à jour les soldes clients à partir des recettes et des paiements (FR)
 │   │                               → Updates client balances based on revenues and payments (EN)
+│   │
+│   ├── purge_log.php               → Script de nettoyage (FR)
+│   │                               → Cleanup Script (EN)
 │   │
 │   └── export_revenues_csv.php     → Script PHP d’export des recettes vers un fichier CSV (comptabilité) (FR)
 │                                   → PHP script to export revenues to a CSV file (accounting) (EN)
