@@ -143,11 +143,11 @@ automation/
 │   └── *.zip                       → Archives ZIP mensuelles par client, contenant les factures PDF générées automatiquement (FR)
 │                                   → Monthly ZIP archives per client, containing automatically generated PDF invoices (EN)
 │
-├── LICENSE.md                      → Conditions d’utilisation et cadre légal (FR)
-│                                   → Terms of use and legal Framework (EN)
+├── LICENCE.md                      → Conditions d’utilisation et cadre légal (FR)
+├── LICENSE.md                      → Terms of use and legal Framework (EN)
 │
-└── README.md                       → Documentation générale du système (FR)
-                                    → General system documentation (EN)
+├── README_FR.md                    → Documentation générale du système (FR)
+└── README.md                       → General system documentation (EN)
 ```
 
 
