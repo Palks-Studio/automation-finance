@@ -64,7 +64,7 @@ Each generated PDF invoice contains:
 ## Project structure
 
 ```
-automation/
+automation-finance/
 │
 ├── engine/
 │   ├── build_facturx_xml.php       → Génération du XML Factur-X (FR)
