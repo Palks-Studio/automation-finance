@@ -63,7 +63,7 @@ Chaque facture PDF générée contient :
 ## Structure du projet
 
 ```
-automation/
+automation-finance/
 │
 ├── engine/
 │   ├── build_facturx_xml.php       → Génération du XML Factur-X (FR)
