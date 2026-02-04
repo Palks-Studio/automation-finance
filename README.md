@@ -14,21 +14,21 @@ It intentionally avoids operational procedures and sensitive details.
 
 ## Overview
 
-This repository presents a financial automation system designed to handle:
+This repository presents a financial automation system designed to handle:  
 
-- invoice generation (single & batch)
-- revenue tracking
-- payment reconciliation
-- client balances
+- invoice generation (single & batch)  
+- revenue tracking  
+- payment reconciliation  
+- client balances  
 - accounting-ready exports
 
 The system is deterministic, auditable, and explicit by design.
 
-It operates:
+It operates:  
 
-- without a database
-- without a CMS
-- without a SaaS dependency
+- without a database  
+- without a CMS  
+- without a SaaS dependency  
 - without any exposed web interface
 
 All executions run server-side, via CLI scripts and cron, with a strict separation of responsibilities.
@@ -36,146 +36,166 @@ All executions run server-side, via CLI scripts and cron, with a strict separati
 This project is not a product, not a SaaS, and not a plug-and-play tool.  
 It documents a production-grade approach to financial automation.
 
----
+Over time, the engine has been progressively extended  
+to cover real-world business cases,  
+without compromising its original design principles.
 
-## Factur-X / EN16931 Compliance
+The billing system now supports:  
 
-The system generates invoices in the **Factur-X format (Comfort profile)** with a **structured XML compliant with the European EN 16931 standard**.
+- multi-line invoices  
+- multiple VAT rates per invoice  
+- complex or extended service periods  
+- multi-month billing scenarios  
+- complex combinations while remaining EN16931 Comfort compliant
 
-Features:  
+This functional expansion did not alter  
+the deterministic, auditable, and traceable nature of the system.
 
-- Factur-X XML **Comfort profile**  
-- **EN 16931** semantic compliance  
-- XSD validation  
-- Schematron validation  
-- E-invoicing interoperability (France / EU)  
-- Compatible with e-invoicing platforms and accounting systems
+### Electronic invoicing (Factur-X)
 
-Each generated PDF invoice contains:  
+The system natively integrates Factur-X electronic invoicing (hybrid PDF with embedded XML),  
+in compliance with the European EN 16931 standard (Comfort profile):  
 
-- a human-readable PDF document  
-- the embedded Factur-X XML for automated processing
+- generation of a semantically EN 16931-compliant Factur-X XML  
+- XML validation (XSD and Schematron)  
+- injection of the XML into the PDF  
+- production of a single final document: the Factur-X hybrid PDF  
+- direct integration into the `run.php` and `run_batch.php` pipelines  
+- no parallel formats  
+- no persistent XML storage
 
-- The system focuses on business compliance and e-invoicing interoperability.  
-- PDF/A compliance (documentary archiving) is not a functional objective of the project and is intentionally out of scope.
+The system targets business compliance and e-invoicing interoperability (France / EU).  
+PDF/A compliance (document archiving) is not a functional objective of the project and is deliberately out of scope.
+
+Factur-X is handled as a native component of the engine,  
+not as an external or optional module.
 
 ---
 
 ## Project structure
 
 ```
-automation-finance/
+automation_finance/
 │
 ├── engine/
-│   ├── build_facturx_xml.php       → Génération du XML Factur-X (FR)
-│   │                               → Factur-X XML generation (EN)
+│   ├── build_facturx_xml.php         → Génération du XML Factur-X (FR)
+│   │                                 → Factur-X XML generation (EN)
 │   │
-│   ├── inject_facturx.py           → Injection du XML Factur-X dans le PDF (FR)
-│   │                               → Factur-X XML injection into PDF (EN)
-│   ├── run.php                     → Moteur principal d’automatisation (cron / CLI) (FR)
-│   │                               → Main automation engine (cron / CLI) (EN)
+│   ├── inject_facturx.py             → Injection du XML Factur-X dans le PDF (FR)
+│   │                                 → Factur-X XML injection into PDF (EN)
+│   ├── run.php                       → Moteur principal d’automatisation (cron / CLI) (FR)
+│   │                                 → Main automation engine (cron / CLI) (EN)
 │   │
-│   ├── billing_rules.php           → Règles de facturation et de tarification dynamique (FR)
-│   │                               → Billing rules and dynamic pricing logic (EN)
+│   ├── run_batch.php                 → Moteur d’automatisation BATCH pour la facturation clients (FR)
+│   │                                 → Batch automation engine for client invoicing (EN)
+│   │ 
+│   ├── billing_rules.php             → Règles de facturation et de tarification dynamique (FR)
+│   │                                 → Billing rules and dynamic pricing logic (EN)
 │   │
-│   ├── run_batch.php               → Moteur d’automatisation BATCH pour la facturation clients (FR)
-│   │                               → Batch automation engine for client invoicing (EN)
+│   ├── vendor/                       → Dépendances PHP (ex: DomPDF) (FR)
+│   │                                 → PHP dependencies (e.g. DomPDF) (EN)
 │   │
-│   ├── vendor/                     → Dépendances PHP (ex: DomPDF) (FR)
-│   │                               → PHP dependencies (e.g. DomPDF) (EN)
+│   ├── alerts.php                    → Gestion des alertes et notifications d’exécution (FR)
+│   │                                 → Execution alerts and notifications handling (EN)
 │   │
-│   ├── alerts.php                  → Gestion des alertes et notifications d’exécution (FR)
-│   │                               → Execution alerts and notifications handling (EN)
+│   ├── import_csv.php                → Import et validation des fichiers CSV clients (FR)
+│   │                                 → Client CSV import and validation handler (EN)
 │   │
-│   ├── import_csv.php              → Import et validation des fichiers CSV clients (FR)
-│   │                               → Client CSV import and validation handler (EN)
+│   ├── mailer.php                    → Envoi des emails avec facture en pièce jointe (FR)
+│   │                                 → Email sender with invoice attachment (EN)
 │   │
-│   ├── mailer.php                  → Envoi des emails avec facture en pièce jointe (FR)
-│   │                               → Email sender with invoice attachment (EN)
+│   ├── mail_signature.php            → Signature Palks Studio (FR)
+│   │                                 → Palks Studio signature (EN)
 │   └── templates/
-│       ├── invoice.html.php        → Template PDF de facture (bilingue FR / EN) (FR)
-│       │                           → Invoice PDF template (bilingual FR / EN) (EN)
+│       ├── invoice.html.php          → Template PDF de facture (bilingue FR / EN) (FR)
+│       │                             → Invoice PDF template (bilingual FR / EN) (EN)
 │       │
-│       └── invoices_batch.html.php → Facture CLIENTS (batch) (FR)
-│                                   → Client Invoices (Batch) (EN)
+│       └── invoices_batch.html.php   → Facture CLIENTS (batch) (FR)
+│                                     → Client Invoices (Batch) (EN)
 ├── clients/
-│   └── client_xxx.php              → Fiche client (seul fichier à modifier par client) (FR)
-│                                   → Client configuration file (only file to edit per client) (EN)
+│   └── client_xxx.php                → Fiche client (seul fichier à modifier par client) (FR)
+│                                     → Client configuration file (only file to edit per client) (EN)
 ├── batch_clients/
-│   └── client_xxx.php              → Configuration batch d’un client final (facturation mensuelle) (FR)
-│                                   → Batch configuration for an end client (monthly invoicing) (EN)
+│   └── client_xxx.php                → Configuration batch d’un client final (facturation mensuelle) (FR)
+│                                     → Batch configuration for an end client (monthly invoicing) (EN)
 ├── data/
 │   ├── logs/
-│   │   └── xxx.log                 → Logs d’exécution par client (FR)
-│   │                               → Execution logs per client (EN)
+│   │   └── xxx.log                   → Logs d’exécution par client (FR)
+│   │                                 → Execution logs per client (EN)
 │   ├── archive_batch/
-│   │   └── xxx.csv                 → CSV client archivé (FR)
-│   │                               → Archived client CSV (EN)
+│   │   └── xxx.csv                   → CSV client archivé (FR)
+│   │                                 → Archived client CSV (EN)
 │   ├── batch_sent/
-│   │   └── xxx.zip                 → Zip envoyés (FR)
-│   │                               → Zip sent (EN)
+│   │   └── xxx.zip                   → Zip envoyés (FR)
+│   │                                 → Zip sent (EN)
 │   ├── usage/
-│   │   └── xxx.json                → Suivi d’usage mensuel par client (FR)
-│   │                               → Monthly client usage tracking (EN)
+│   │   └── xxx.json                  → Suivi d’usage mensuel par client (FR)
+│   │                                 → Monthly client usage tracking (EN)
 │   ├── revenues/
-│   │   └── xxx.json                → Recettes cumulées (source comptable interne) (FR)
-│   │                               → Cumulative revenues (internal accounting source) (EN)
+│   │   └── xxx.json                  → Recettes cumulées (source comptable interne) (FR)
+│   │                                 → Cumulative revenues (internal accounting source) (EN)
 │   ├── payments/
-│   │   └── xxx.json                → Paiements reçus du client (virements, montants réellement encaissés) (FR)
-│   │                               → Payments received from the client (bank transfers, actually received amounts) (EN)
+│   │   └── xxx.json                  → Paiements reçus du client (virements, montants réellement encaissés) (FR)
+│   │                                 → Payments received from the client (bank transfers, actually received amounts) (EN)
 │   ├── balance/
-│   │   └── xxx.json                → Solde comptable du client (facturé vs payé, statut payé / impayé) (FR)
-│   │                               → Client accounting balance (invoiced vs paid, paid / unpaid status) (EN)
+│   │   └── xxx.json                  → Solde comptable du client (facturé vs payé, statut payé / impayé) (FR)
+│   │                                 → Client accounting balance (invoiced vs paid, paid / unpaid status) (EN)
 │   ├── invoices/
-│   │   └── client/                 → Factures de l’activité principale (facturation directe, usage interne) (FR)
-│   │                               → Invoices from the main activity (direct invoicing, internal use) (EN)
+│   │   └── client/                   → Factures de l’activité principale (facturation directe, usage interne) (FR)
+│   │                                 → Invoices from the main activity (direct invoicing, internal use) (EN)
 │   ├── invoices_batch/
-│   │   └── client/                 → Factures générées dans le cadre du service batch (clients finaux) (FR)
-│   │                               → Invoices generated as part of the batch service (end clients) (EN)
+│   │   └── client/                   → Factures générées dans le cadre du service batch (clients finaux) (FR)
+│   │                                 → Invoices generated as part of the batch service (end clients) (EN)
 │   ├── inbox_batch/
-│   │   └── batch.csv               → Fichier CSV fourni par le client (source de facturation batch) (FR)
-│   │                               → Client-provided CSV file (batch invoicing source) (EN)
+│   │   └── batch.csv                 → Fichier CSV fourni par le client (source de facturation batch) (FR)
+│   │                                 → Client-provided CSV file (batch invoicing source) (EN)
 │   ├── counters/
-│   │   └── xxx.json                → Compteur annuel de factures par client (facturation directe) (FR)
-│   │                               → Annual invoice counter per client (direct invoicing) (EN)
+│   │   └── xxx.json                  → Compteur annuel de factures par client (facturation directe) (FR)
+│   │                                 → Annual invoice counter per client (direct invoicing) (EN)
 │   └── counters_batch/
-│       └── xxx.json                → Compteur annuel de factures par client (facturation batch) (FR)
-│                                   → Annual invoice counter per client (batch invoicing) (EN)
-├── docs/
-│       └── format_csv.md           → Spécification officielle du format CSV attendu (FR)
-│                                   → Official specification of the expected CSV format (EN)
+│       └── xxx.json                  → Compteur annuel de factures par client (facturation batch) (FR)
+│                                     → Annual invoice counter per client (batch invoicing) (EN)
 ├── tools/
-│   ├── balances.php                → Met à jour les soldes clients à partir des recettes et des paiements (FR)
-│   │                               → Updates client balances based on revenues and payments (EN)
+│   ├── update_balances.php           → Met à jour les soldes clients à partir des recettes et des paiements (FR)
+│   │                                 → Updates client balances based on revenues and payments (EN)
+│   │ 
+│   ├── send_paid_receipts.php        → Envoi automatique des reçus clients payés (FR)
+│   │                                 → Automatic sending of paid client receipts (EN)
 │   │
-│   ├── purge_log.php               → Script de nettoyage (FR)
-│   │                               → Cleanup Script (EN)
+│   ├── purge_log.php                 → Script de nettoyage (FR)
+│   │                                 → Cleanup Script (EN)
 │   │
-│   ├── recettes_year.php           → Script PHP d’export des recettes encaissées sur une année complète (FR)
-│   │                               → PHP script to export actually received revenues for a full year (EN)
+│   ├── recettes_year.php             → Script PHP d’export des recettes encaissées sur une année complète (FR)
+│   │                                 → PHP script to export actually received revenues for a full year (EN)
 │   │
-│   ├── recettes_month.php          → Script PHP d’export des recettes encaissées sur un mois donné (FR)
-│   │                               → PHP script to export actually received revenues for a given month (EN)
+│   ├── recettes_month.php            → Script PHP d’export des recettes encaissées sur un mois donné (FR)
+│   │                                 → PHP script to export actually received revenues for a given month (EN)
 │   │
-│   └── revenues_csv.php            → Script PHP d’export des recettes vers un fichier CSV (comptabilité) (FR)
-│                                   → PHP script to export revenues to a CSV file (accounting) (EN)
+│   └── revenues_csv.php              → Script PHP d’export des recettes vers un fichier CSV (comptabilité) (FR)
+│                                     → PHP script to export revenues to a CSV file (accounting) (EN)
 ├── exports/
 │   ├── recettes/
-│   │   └── recettes.csv            → CSV mensuels / annuels générés à la demande (FR)
-│   │                               → Monthly CSV exports generated on demand / Yearly CSV exports generated on demand (EN)
+│   │   └── recettes.csv              → CSV mensuels / annuels générés à la demande (FR)
+│   │                                 → Monthly CSV exports generated on demand / Yearly CSV exports generated on demand (EN)
 │   │
-│   └── payments/                   → CSV généré à partir des fichiers JSON de paiements reçus (FR)
-│       └── payments.csv            → CSV generated from the received payments JSON files (EN)
+│   └── payments/                     → CSV généré à partir des fichiers JSON de paiements reçus (FR)
+│       └── payments.csv              → CSV generated from the received payments JSON files (EN)
 │
 ├── downloads/
-│   └── *.zip                       → Archives ZIP mensuelles par client, contenant les factures PDF générées automatiquement (FR)
-│                                   → Monthly ZIP archives per client, containing automatically generated PDF invoices (EN)
+│   └── *.zip                         → Archives ZIP mensuelles par client, contenant les factures PDF générées automatiquement (FR)
+│                                     → Monthly ZIP archives per client, containing automatically generated PDF invoices (EN)
 │
-├── LICENCE.md                      → Conditions d’utilisation et cadre légal (FR)
-├── LICENSE.md                      → Terms of use and legal Framework (EN)
-│
-├── README_FR.md                    → Documentation générale du système (FR)
-└── README.md                       → General system documentation (EN)
+├── LICENSE.md                        → Conditions d’utilisation et cadre légal (FR)
+│                                     → Terms of use and legal Framework (EN)
+└── docs/
+    ├── format_csv.md                 → Spécification officielle du format CSV attendu (FR)
+    │                                 → Official specification of the expected CSV format (EN)
+    │
+    ├── README_FR.md                  → Documentation générale du système (FR)
+    ├── README.md                     → General system documentation (EN)
+    │
+    └── SYSTEM_OVERVIEW_AUTOMATION.md → Vue d’ensemble du système d’automatisation de facturation (FR)
+                                      → Billing Automation System Overview (EN)
 ```
 
 
@@ -184,15 +204,17 @@ automation-finance/
 ## What this repository is (and is not)
 
 ### This repository is
-- a documented architecture for financial automation
-- a system designed to be predictable and auditable
-- an example of strict separation between billing, payments, and accounting
+
+- a documented architecture for financial automation  
+- a system designed to be predictable and auditable  
+- an example of strict separation between billing, payments, and accounting  
 - a real-world system used in production
 
 ### This repository is not
-- a certified accounting software
-- a ready-to-use invoicing tool
-- a payment processing system
+
+- a certified accounting software  
+- a ready-to-use invoicing tool  
+- a payment processing system  
 - a web application or API service
 
 The outputs produced by this system are intended for internal operational use and for integration with standard accounting workflows.
@@ -201,7 +223,7 @@ The outputs produced by this system are intended for internal operational use an
 
 ## Core design principles
 
-This system follows a small set of non-negotiable principles:
+This system follows a small set of non-negotiable principles:  
 
 - **No magic**  
   Every operation is explicit and traceable.
@@ -223,51 +245,62 @@ This system follows a small set of non-negotiable principles:
 
 These principles favor predictability over convenience and clarity over speed.
 
+The progressive extension of the engine  
+did not compromise these principles.
+
+Newly added capabilities  
+(multi-line invoices, multiple VAT rates, complex service periods)  
+strictly follow the same rules  
+of predictability, traceability, and explicit rejection.
+
 ---
 
 ## System architecture (high-level)
 
-The system is composed of independent layers, each with a single responsibility:
+The system is composed of independent layers, each with a single responsibility:  
 
-- **Billing engines**
-  - direct invoicing
+- **Billing engines**  
+  - direct invoicing  
   - batch invoicing (CSV-driven)
 
-- **Business rules**
-  - centralized pricing and billing logic
+- **Business rules**  
+  - centralized pricing and billing logic  
   - single source of truth
 
-- **Alerting layer**
-  - blocking vs informational alerts
+- **Alerting layer**  
+  - blocking vs informational alerts  
   - explicit execution feedback
 
-- **Payment layer**
-  - manual payment records
+- **Payment layer**  
+  - manual payment records  
   - deliberately decoupled from billing
 
-- **Balance reconciliation**
-  - computed state (invoiced vs paid)
+- **Balance reconciliation**  
+  - computed state (invoiced vs paid)  
   - paid / unpaid detection
 
-- **Export layer**
-  - accounting-ready CSV outputs
+- **Export layer**  
+  - accounting-ready CSV outputs  
   - reproducible at any time
 
-No layer mutates another implicitly.
+Some layers can evolve independently  
+without impacting others,  
+allowing the system to be extended  
+without global side effects.
 
 ---
 
 ## Project structure (conceptual view)
 
-The directory layout mirrors the system’s responsibilities:
+The directory layout mirrors the system’s responsibilities:  
 
-engine/ → execution engines & business logic
-clients/ → client configuration (one file per client)
-batch_clients/ → batch client definitions
-data/ → immutable operational data (logs, invoices, balances)
-docs/ → internal specifications (e.g. CSV format)
-tools/ → reconciliation and export utilities
-exports/ → generated accounting artifacts
+engine/ → execution engines & business logic  
+clients/ → client configuration (one file per client)  
+batch_clients/ → batch client definitions  
+data/ → immutable operational data (logs, invoices, balances)  
+docs/ → internal specifications (e.g. CSV format)  
+tools/ → reconciliation and export utilities  
+exports/ → generated accounting artifacts  
 downloads/ → packaged invoice archives
 
 
@@ -278,7 +311,7 @@ Cross-responsibility coupling is intentionally avoided.
 
 ## Execution model
 
-The system runs on a closed, repeatable cycle:
+The system runs on a closed, repeatable cycle:  
 
 1. **Generation phase**  
    Invoices are generated based on explicit rules and configurations.
@@ -301,39 +334,57 @@ At no point does the system infer or guess missing information.
 
 ## Batch invoicing model
 
-In batch mode:
+In batch mode:  
 
-- one client provides one CSV file
-- one CSV line equals one invoice
-- validation is strict and structural
-- the entire batch stops on the first error
+- one client provides one CSV file  
+- one CSV line equals one invoice  
+- validation is strict and structural  
+- the entire batch stops on the first error  
 - raw inputs are archived before consumption
 
 This model favors data integrity over partial success.
+
+The billing model supports complex use cases  
+without altering the execution cycle:  
+
+- multi-line invoices  
+- multiple VAT rates within a single invoice  
+- extended or split service periods  
+- multi-month billing scenarios
+
+These capabilities are integrated  
+without introducing implicit conditional logic  
+or special-case processing outside the engine.
 
 ---
 
 ## Integrity & safeguards
 
-Several mechanisms are enforced across the system:
+Several mechanisms are enforced across the system:  
 
-- anti-duplicate protections
-- annual sequential counters
-- immutable archives
-- explicit execution flags
-- categorized alerts
+- anti-duplicate protections  
+- annual sequential counters  
+- immutable archives  
+- explicit execution flags  
+- categorized alerts  
 - exhaustive logging
 
 A failed execution is considered safer than a partial one.
+
+Validation rules remain identical  
+regardless of invoice complexity.
+
+A complex case is treated  
+with the same requirements as a simple one.
 
 ---
 
 ## Security posture
 
-- CLI-only execution
-- no exposed endpoints
-- no browser access
-- no external API dependency for core operations
+- CLI-only execution  
+- no exposed endpoints  
+- no browser access  
+- no external API dependency for core operations  
 - data stored locally on the server
 
 Security is achieved through absence of surface, not complexity.
@@ -342,11 +393,11 @@ Security is achieved through absence of surface, not complexity.
 
 ## Maintenance & longevity
 
-The system is designed to:
+The system is designed to:  
 
-- be understandable without its original author
-- be auditable months or years later
-- degrade loudly rather than silently
+- be understandable without its original author  
+- be auditable months or years later  
+- degrade loudly rather than silently  
 - integrate cleanly with standard accounting processes
 
 This repository documents an engineering approach, not a shortcut.
@@ -363,4 +414,4 @@ with a strong emphasis on rigor, traceability, and long-term maintainability.
 ---
 
 © Palks Studio — see LICENSE.md  
-- https://palks-studio.com
+https://palks-studio.com
