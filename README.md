@@ -185,17 +185,24 @@ automation_finance/
 │   └── *.zip                         → Archives ZIP mensuelles par client, contenant les factures PDF générées automatiquement (FR)
 │                                     → Monthly ZIP archives per client, containing automatically generated PDF invoices (EN)
 │
-├── LICENSE.md                        → Conditions d’utilisation et cadre légal (FR)
-│                                     → Terms of use and legal Framework (EN)
+├── LICENCE.md                        → Conditions d’utilisation et cadre légal (FR)
+├── LICENSE.md                        → Terms of use and legal Framework (EN)
+│
+├── CONTRATS/                         → Documents contractuels et juridiques du service (FR)
+│                                     → Legal documents related to the service (EN)
+│
 └── docs/
-    ├── format_csv.md                 → Spécification officielle du format CSV attendu (FR)
-    │                                 → Official specification of the expected CSV format (EN)
-    │
     ├── README_FR.md                  → Documentation générale du système (FR)
     ├── README.md                     → General system documentation (EN)
     │
-    └── SYSTEM_OVERVIEW_AUTOMATION.md → Vue d’ensemble du système d’automatisation de facturation (FR)
-                                      → Billing Automation System Overview (EN)
+    ├── SERVICE_MEMO_FR.md            → Note interne de positionnement du service (FR)
+    ├── SERVICE_MEMO.md               → Internal Service Positioning Memo (EN)
+    │
+    ├── README_DEPLOY_FR.md           → Guide d’installation et d’exploitation (FR)
+    ├── README_DEPLOY_EN.md           → Installation and Production Guide (EN)
+    │
+    ├── VUE_DENSEMBLE_AUTOMATION.md   → Vue d’ensemble du système d’automatisation de facturation (FR)
+    └── SYSTEM_OVERVIEW_AUTOMATION.md → Billing Automation System Overview (EN)
 ```
 
 
