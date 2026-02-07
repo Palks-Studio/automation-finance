@@ -2,6 +2,8 @@
   <img src="docs/images/Palks_Studio.png" alt="Palks Studio" width="600">
 </p>
 
+![License](https://img.shields.io/badge/License-LICENSE.md-lightgreen.svg)
+
 > 🇬🇧 English | [🇫🇷 Français](./README_FR.md)
 
 # Palks Studio — Automation System
