@@ -1,10 +1,23 @@
 <p align="center">
-  <img src="docs/images/Palks_Studio.png" alt="Palks Studio" width="1200">
+  <img src="docs/images/facturx_en.png"
+       alt="Factur-X invoicing workflow diagram — CSV processing to PDF generation with embedded XML"
+       width="1200">
 </p>
 
 > 🇬🇧 English | [🇫🇷 Français](./README_FR.md)
 
 ![License](https://img.shields.io/badge/License-LICENSE.md-lightgreen.svg)
+
+<p align="center">
+  <a href="https://palks-studio.com">
+    <img src="https://img.shields.io/badge/Palks%20Studio-Website-0095b1?style=for-the-badge" />
+  </a>
+  &nbsp;
+  <a href="https://comeup.com/fr/@palksstudio">
+    <img src="https://img.shields.io/badge/ComeUp-Profile-151b1c?style=for-the-badge" />
+  </a>
+</p>
+
 
 # Palks Studio — Automation System
 **Financial automation built for rigor, traceability, and longevity**
