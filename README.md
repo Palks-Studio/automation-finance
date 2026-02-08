@@ -22,6 +22,9 @@
 # Palks Studio — Automation System
 **Financial automation built for rigor, traceability, and longevity**
 
+> This repository is a technical presentation and documentation repository.  
+> It does not contain downloadable source code or production files.
+
 This README documents design principles and system architecture.  
 It intentionally avoids operational procedures and sensitive details.
 
