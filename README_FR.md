@@ -14,7 +14,7 @@
   </a>
   &nbsp;
   <a href="https://comeup.com/fr/@palksstudio">
-    <img src="https://img.shields.io/badge/ComeUp-Profile-151b1c?style=for-the-badge" />
+    <img src="https://img.shields.io/badge/ComeUp-Profile-FFC400?style=for-the-badge" />
   </a>
 </p>
 
