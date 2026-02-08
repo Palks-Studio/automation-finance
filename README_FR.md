@@ -1,13 +1,28 @@
 <p align="center">
-  <img src="docs/images/Palks_Studio.png" alt="Palks Studio" width="1200">
+  <img src="docs/images/facturx_fr.png"
+       alt="Factur-X invoicing workflow diagram — CSV processing to PDF generation with embedded XML"
+       width="1200">
 </p>
 
 > 🇫🇷 Français | [🇬🇧 English](./README.md)
 
 ![License](https://img.shields.io/badge/License-LICENSE.md-lightgreen.svg)
 
+<p align="center">
+  <a href="https://palks-studio.com">
+    <img src="https://img.shields.io/badge/Palks%20Studio-Website-0095b1?style=for-the-badge" />
+  </a>
+  &nbsp;
+  <a href="https://comeup.com/fr/@palksstudio">
+    <img src="https://img.shields.io/badge/ComeUp-Profile-151b1c?style=for-the-badge" />
+  </a>
+</p>
+
 # Palks Studio — Système d’automatisation  
 **Automatisation financière conçue pour la rigueur, la traçabilité et la durée**
+
+> Ce dépôt constitue une présentation technique et une documentation du projet.  
+> Il ne contient pas de code source téléchargeable ni de fichiers de production.
 
 Ce README documente les principes de conception et l’architecture du système.  
 Il évite volontairement toute procédure opérationnelle ou détail sensible.
