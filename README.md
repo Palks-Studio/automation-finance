@@ -104,6 +104,7 @@ automation_finance/
 │   │
 │   ├── inject_facturx.py             → Injection du XML Factur-X dans le PDF (FR)
 │   │                                 → Factur-X XML injection into PDF (EN)
+│   │
 │   ├── run.php                       → Moteur principal d’automatisation (cron / CLI) (FR)
 │   │                                 → Main automation engine (cron / CLI) (EN)
 │   │
