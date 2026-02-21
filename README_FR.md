@@ -147,13 +147,21 @@ automation_finance/
 ├── batch_clients/                    → Configuration batch d’un client final (facturation mensuelle)
 ├── CONTRATS/                         → Documents contractuels et juridiques du service
 │
-├── LICENCE.md                        → Conditions d’utilisation et cadre légal
+├── LICENCE.md                        → Conditions d’utilisation et cadre légal (FR)
+├── LICENSE.md                        → Terms of use and legal Framework
 │
 └── docs/
     ├── README_FR.md                  → Documentation générale du système
+    ├── README.md                     → General system documentation (EN)
+    │
     ├── SERVICE_MEMO_FR.md            → Note interne de positionnement du service
+    ├── SERVICE_MEMO.md               → Internal Service Positioning Memo (EN)
+    │
     ├── README_DEPLOY_FR.md           → Guide d’installation et d’exploitation
-    └── VUE_DENSEMBLE_AUTOMATION.md   → Vue d’ensemble du système d’automatisation de facturation
+    ├── README_DEPLOY_EN.md           → Installation and Production Guide (EN)
+    │
+    ├── VUE_DENSEMBLE_AUTOMATION.md   → Vue d’ensemble du système d’automatisation de facturation
+    └── SYSTEM_OVERVIEW_AUTOMATION.md → Billing Automation System Overview (EN)
 ```
 
 
