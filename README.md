@@ -105,11 +105,11 @@ automation_finance/
 │   ├── run.php                       → Main automation engine (cron / CLI)
 │   ├── run_batch.php                 → Batch automation engine for client invoicing
 │   ├── billing_rules.php             → Billing rules and dynamic pricing logic
-│   ├── vendor/                       → PHP dependencies (e.g. DomPDF)
 │   ├── alerts.php                    → Execution alerts and notifications handling
 │   ├── import_csv.php                → Client CSV import and validation handler
 │   ├── mailer.php                    → Email sender with invoice attachment
 │   ├── mail_signature.php            → Palks Studio signature
+│   ├── vendor/                       → PHP dependencies (e.g. DomPDF)
 │   └── templates/                    → Invoices PDF template (bilingual FR / EN)
 │
 ├── data/
@@ -134,9 +134,10 @@ automation_finance/
 │   ├── build_client.php              → Client email index builder
 │   ├── send_paid_receipts.php        → Automatic sending of paid client receipts
 │   ├── purge_log.php                 → Cleanup Script
-│   ├── recettes_year.php             → PHP script to export actually received revenues for a full year
-│   ├── recettes_month.php            → PHP script to export actually received revenues for a given month
-│   └── revenues_csv.php              → PHP script to export revenues to a CSV file (accounting)
+│   ├── client_project.php            → CLI script aggregating and exporting client data by identifier
+│   ├── recettes_year.php             → Export actually received revenues for a full year
+│   ├── recettes_month.php            → Export actually received revenues for a given month
+│   └── revenues_csv.php              → Export revenues to a CSV file (accounting)
 │
 ├── exports/
 │   ├── recettes/                     → Monthly CSV exports generated on demand / Yearly CSV exports generated on demand
@@ -294,9 +295,21 @@ The system runs on a closed, repeatable cycle:
 5. **Export phase**  
    Accounting-ready artifacts are produced on demand.
 
-Client configurations are prepared upstream via the onboarding form  
-and transformed by `engine/build_json.php`  
-before being used by the batch engine.
+### Client onboarding tool
+
+`engine/build_json.php` converts onboarding data into the internal  
+client configuration used by the automation pipeline.
+
+During processing, the script:  
+
+- generates a unique `client_id`  
+- creates the client configuration  
+- prepares the batch client definition  
+- initializes payment tracking  
+- archives the processed onboarding record
+
+This step occurs strictly during the preparation phase and does not  
+interfere with the monthly execution cycle.
 
 At no point does the system infer or guess missing information.
 
@@ -325,6 +338,26 @@ without altering the execution cycle:
 These capabilities are integrated  
 without introducing implicit conditional logic  
 or special-case processing outside the engine.
+
+### Entry point — client CSV upload
+
+The monthly CSV file is submitted by the client through a dedicated  
+upload form, accessible only via an individual secure link provided  
+after contract validation.
+
+The entry point:  
+
+- accepts CSV files only  
+- provides a downloadable reference CSV template  
+- stores the file in the structured `inbox_batch/` directory  
+- enforces a single submission per client and period  
+- preserves the file for strict downstream validation
+
+The uploaded CSV is treated as a **raw billing data source**  
+and is never considered a final invoice.
+
+It is later validated and consumed exclusively by `run_batch.php`  
+within the standard batch processing pipeline.
 
 ---
 
