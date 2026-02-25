@@ -15,10 +15,6 @@
   <a href="https://palks-studio.com">
     <img src="https://img.shields.io/badge/Palks%20Studio-Website-0095b1?style=for-the-badge" />
   </a>
-  &nbsp;
-  <a href="https://comeup.com/fr/@palksstudio">
-    <img src="https://img.shields.io/badge/ComeUp-Profile-FFC400?style=for-the-badge" />
-  </a>
 </p>
 
 # Palks Studio — Système d’automatisation  
