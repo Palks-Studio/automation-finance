@@ -282,13 +282,32 @@ The system runs on a closed, repeatable cycle:
 2. **Payment phase**  
    Payments are recorded independently, without automation or assumptions.
 
-3. **Reconciliation phase**  
+### Invoice receipt stamping tool
+
+A complementary operational tool allows the generation of  
+stamped “paid” versions of invoices from the original PDF files.
+
+This tool:  
+
+- accepts a ZIP archive containing invoices  
+- automatically detects PDF files  
+- applies a clear "PAID" / receipt stamp with payment date  
+- generates a new stamped version of the document  
+- supports both single and batch processing
+
+This tool does not interact with the invoicing engine itself  
+and never modifies the original invoices.
+
+Stamped documents are considered operational artefacts  
+derived from the issued invoices.
+
+4. **Reconciliation phase**  
    Invoiced amounts are compared against received payments.
 
-4. **Consolidation phase**  
+5. **Consolidation phase**  
    Client balances are computed and statuses updated.
 
-5. **Export phase**  
+6. **Export phase**  
    Accounting-ready artifacts are produced on demand.
 
 ### Client onboarding tool
