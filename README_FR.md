@@ -283,13 +283,32 @@ Le système fonctionne selon un cycle fermé et reproductible :
 2. **Phase de paiement**  
    Les paiements sont enregistrés indépendamment, sans automatisme.
 
-3. **Phase de réconciliation**  
+### Outil d’acquittement des factures
+
+Un outil opérationnel complémentaire permet de générer des versions  
+acquittées des factures à partir des PDF originaux.
+
+Cet outil :  
+
+- accepte une archive ZIP contenant les factures  
+- détecte automatiquement les fichiers PDF  
+- applique un marquage explicite "ACQUITTEE" avec date de paiement  
+- génère une nouvelle version du document  
+- permet un traitement unitaire ou batch
+
+Cet outil n’intervient pas dans le moteur de facturation lui-même  
+et ne modifie jamais les factures originales.
+
+Les documents acquittés sont considérés comme des artefacts  
+opérationnels dérivés des factures émises.
+
+4. **Phase de réconciliation**  
    Les montants facturés sont comparés aux paiements reçus.
 
-4. **Phase de consolidation**  
+5. **Phase de consolidation**  
    Les soldes clients sont calculés et mis à jour.
 
-5. **Phase d’export**  
+6. **Phase d’export**  
    Les données comptables sont générées à la demande.
 
 ### Outil d’onboarding client
