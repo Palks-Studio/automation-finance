@@ -27,6 +27,8 @@
 Ce README documente les principes de conception et l’architecture du système.  
 Il évite volontairement toute procédure opérationnelle ou détail sensible.
 
+[![Facturation batch Factur-X](https://img.shields.io/badge/Facturation%20batch%20Factur--X-0095b1?style=flat)](https://palks-studio.com/fr/facturation-batch-facturx)
+
 ---
 
 ## Vue d’ensemble
