@@ -10,6 +10,7 @@
 ![PHP](https://img.shields.io/badge/PHP-CLI-777BB4?style=flat)
 ![Automation](https://img.shields.io/badge/Type-Automation-0095b1?style=flat)
 ![Factur-X](https://img.shields.io/badge/Invoice-Factur--X-151b1c?style=flat)
+[![Batch Invoicing (Factur-X)](https://img.shields.io/badge/Batch%20Invoicing%20(Factur--X)-0095b1?style=flat)](https://palks-studio.com/en/batch-invoicing-facturx)
 
 <p align="center">
   <a href="https://palks-studio.com">
