@@ -28,6 +28,8 @@
 This README documents design principles and system architecture.  
 It intentionally avoids operational procedures and sensitive details.
 
+[![Batch Invoicing (Factur-X)](https://img.shields.io/badge/Batch%20Invoicing%20(Factur--X)-0095b1?style=flat)](https://palks-studio.com/en/batch-invoicing-facturx)
+
 ---
 
 ## Overview
