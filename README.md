@@ -85,7 +85,7 @@ in compliance with the European EN 16931 standard (Comfort profile):
 - no persistent XML storage
 
 The system targets business compliance and e-invoicing interoperability (France / EU).  
-PDF/A compliance (document archiving) is not a functional objective of the project and is deliberately out of scope.
+Generated invoices are PDF/A-3 compliant (long-term archiving) through the combination of mPDF and factur-x.
 
 Factur-X is handled as a native component of the engine,  
 not as an external or optional module.
@@ -108,7 +108,7 @@ automation_finance/
 │   ├── import_csv.php                → Client CSV import and validation handler
 │   ├── mailer.php                    → Email sender with invoice attachment
 │   ├── mail_signature.php            → Palks Studio signature
-│   ├── vendor/                       → PHP dependencies (e.g. DomPDF)
+│   ├── vendor/                       → PHP dependencies (e.g. mPDF)
 │   └── templates/                    → Invoices PDF template (bilingual FR / EN)
 │
 ├── data/
@@ -304,13 +304,13 @@ and never modifies the original invoices.
 Stamped documents are considered operational artefacts  
 derived from the issued invoices.
 
-4. **Reconciliation phase**  
+3. **Reconciliation phase**  
    Invoiced amounts are compared against received payments.
 
-5. **Consolidation phase**  
+4. **Consolidation phase**  
    Client balances are computed and statuses updated.
 
-6. **Export phase**  
+5. **Export phase**  
    Accounting-ready artifacts are produced on demand.
 
 ### Client onboarding tool
@@ -454,6 +454,15 @@ Status: Stable — used in real production conditions.
 
 The system has been designed to operate autonomously,  
 with a strong emphasis on rigor, traceability, and long-term maintainability.
+
+---
+
+## Libraries
+
+- mPDF 8.3 (mpdf/mpdf) — PDF/A-1b generation (invoices and paid receipts)  
+- setasign/fpdi — PDF reading and overlay (stamping via invoice stamper)  
+- factur-x 3.15 (Python) — Factur-X XML injection and PDF/A-3 conversion  
+- pypdf — automatic dependency of factur-x
 
 ---
 
