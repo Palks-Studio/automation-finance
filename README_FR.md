@@ -83,8 +83,8 @@ conformément à la norme européenne EN 16931 (profil Comfort) :
 - aucun format parallèle  
 - aucun stockage XML persistant
 
-Le système vise la conformité métier et l’interopérabilité e-facturation (France / UE).  
-La conformité PDF/A (archivage documentaire) n’est pas un objectif fonctionnel du projet et est volontairement hors périmètre.  
+Le système vise la conformité métier et l'interopérabilité e-facturation (France / UE).  
+Les factures générées sont conformes PDF/A-3 (archivage long terme) grâce à la combinaison mPDF et factur-x.
 
 Factur-X est traité comme un composant natif du moteur,  
 et non comme un module externe ou optionnel.
@@ -107,7 +107,7 @@ automation_finance/
 │   ├── import_csv.php                → Import et validation des fichiers CSV clients
 │   ├── mailer.php                    → Envoi des emails avec facture en pièce jointe
 │   ├── mail_signature.php            → Signature Palks Studio
-│   ├── vendor/                       → Dépendances PHP (ex: DomPDF)
+│   ├── vendor/                       → Dépendances PHP (ex: mPDF)
 │   └── templates/                    → Templates PDF de facture (bilingue FR / EN)
 │
 ├── data/
@@ -305,13 +305,13 @@ et ne modifie jamais les factures originales.
 Les documents acquittés sont considérés comme des artefacts  
 opérationnels dérivés des factures émises.
 
-4. **Phase de réconciliation**  
+3. **Phase de réconciliation**  
    Les montants facturés sont comparés aux paiements reçus.
 
-5. **Phase de consolidation**  
+4. **Phase de consolidation**  
    Les soldes clients sont calculés et mis à jour.
 
-6. **Phase d’export**  
+5. **Phase d’export**  
    Les données comptables sont générées à la demande.
 
 ### Outil d’onboarding client
@@ -458,6 +458,15 @@ Statut : Stable — utilisé en conditions réelles de production.
 
 Le système est conçu pour fonctionner de manière autonome,  
 avec une exigence forte de rigueur, traçabilité et maintenabilité long terme.
+
+---
+
+## Bibliothèques
+
+- mPDF 8.3 (mpdf/mpdf) — génération PDF/A-1b (factures et acquittées)  
+- setasign/fpdi — lecture et superposition PDF (acquittement via invoice stamper)  
+- factur-x 3.15 (Python) — injection XML Factur-X et conversion PDF/A-3  
+- pypdf — dépendance automatique de factur-x
 
 ---
 
