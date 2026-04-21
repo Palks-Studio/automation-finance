@@ -72,19 +72,19 @@ la nature déterministe, auditable et traçable du système.
 
 ### Facturation électronique (Factur-X)
 
-Le système intègre nativement la génération de factures Factur-X (PDF hybride + XML embarqué),  
+Le système intègre nativement la génération de factures Factur-X (PDF hybride avec XML embarqué),  
 conformément à la norme européenne EN 16931 (profil Comfort) :  
 
-- génération d’un XML Factur-X sémantiquement conforme EN 16931  
+- génération d’un XML Factur-X conforme à la norme EN 16931  
 - validation du XML (XSD et Schematron)  
-- injection du XML dans le PDF  
-- production d’un unique document final : le PDF hybride Factur-X  
-- intégration directe dans les pipelines `run.php` et `run_batch.php`  
+- intégration du XML dans le document PDF  
+- production d’un document final unique (PDF hybride Factur-X)  
+- intégration directe dans les processus d’automatisation  
 - aucun format parallèle  
 - aucun stockage XML persistant
 
-Le système vise la conformité métier et l'interopérabilité e-facturation (France / UE).  
-Les factures générées sont conformes PDF/A-3 (archivage long terme) grâce à la combinaison mPDF et factur-x.
+Le système vise la conformité métier et l’interopérabilité en e-facturation (France / UE).  
+Les factures générées respectent le standard PDF/A-3 pour l’archivage long terme.
 
 Factur-X est traité comme un composant natif du moteur,  
 et non comme un module externe ou optionnel.
@@ -96,58 +96,16 @@ et non comme un module externe ou optionnel.
 ```
 automation_finance/
 │
-├── engine/
-│   ├── build_facturx_xml.php         → Génération du XML Factur-X
-│   ├── build_json.php                → Génération du JSON d’onboarding client
-│   ├── inject_facturx.py             → Injection du XML Factur-X dans le PDF
-│   ├── run.php                       → Moteur principal d’automatisation (cron / CLI)
-│   ├── run_batch.php                 → Moteur d’automatisation BATCH pour la facturation clients
-│   ├── billing_rules.php             → Règles de facturation et de tarification dynamique
-│   ├── alerts.php                    → Gestion des alertes et notifications d’exécution
-│   ├── import_csv.php                → Import et validation des fichiers CSV clients
-│   ├── mailer.php                    → Envoi des emails avec facture en pièce jointe
-│   ├── mail_signature.php            → Signature Palks Studio
-│   ├── vendor/                       → Dépendances PHP (ex: mPDF)
-│   └── templates/                    → Templates PDF de facture (bilingue FR / EN)
-│
-├── data/
-│   ├── logs/                         → Logs d’exécution par client
-│   ├── onboarding/                   → Fichiers JSON issus du formulaire d’onboarding client
-│   ├── onboarding_done/              → JSON d’onboarding traités et archivés après build
-│   ├── archive_batch/                → CSV client archivé
-│   ├── batch_sent/                   → Zip envoyés
-│   ├── usage/                        → Suivi d’usage mensuel par client
-│   ├── revenues/                     → Recettes cumulées (source comptable interne)
-│   ├── payments/                     → Paiements reçus du client (virements, montants réellement encaissés)
-│   ├── balance/                      → Solde comptable du client (facturé vs payé, statut payé / impayé)
-│   ├── invoices/                     → Factures de l’activité principale (facturation directe, usage interne)
-│   ├── invoices_batch/               → Factures générées dans le cadre du service batch (clients finaux)
-│   ├── inbox_batch/                  → Fichier CSV fourni par le client (source de facturation batch)
-│   ├── counters/                     → Compteur annuel de factures par client (facturation directe)
-│   └── counters_batch/               → Compteur annuel de factures par client (facturation batch)
-│
-├── tools/
-│   ├── update_balances.php           → Met à jour les soldes clients à partir des recettes et des paiements
-│   ├── find_client.php               → Recherche d’une fiche client
-│   ├── build_client.php              → Génération de l’index email
-│   ├── send_paid_receipts.php        → Envoi automatique des reçus clients payés
-│   ├── purge_log.php                 → Script de nettoyage
-│   ├── client_project.php            → Export des artefacts liés à un client à partir de son identifiant
-│   ├── recettes_year.php             → Export des recettes encaissées sur une année complète
-│   ├── recettes_month.php            → Export des recettes encaissées sur un mois donné
-│   └── revenues_csv.php              → Export des recettes vers un fichier CSV (comptabilité)
-│
-├── exports/
-│   ├── recettes/                     → CSV mensuels / annuels générés à la demande
-│   └── payments/                     → CSV généré à partir des fichiers JSON de paiements reçus
-│
-├── downloads/                        → Archives ZIP mensuelles par client, contenant les factures PDF générées automatiquement
-├── clients/                          → Fiche client (seul fichier à modifier par client)
-├── batch_clients/                    → Configuration batch d’un client final (facturation mensuelle)
-├── CONTRATS/                         → Documents contractuels et juridiques du service
+├── engine/                           → Moteur d’automatisation (facturation, génération, traitement)
+├── data/                             → Stockage interne des données (clients, factures, suivi)
+├── tools/                            → Outils internes et scripts de maintenance
+├── exports/                          → Export de données et reporting
+├── downloads/                        → Distribution des documents générés
+├── clients/                          → Configuration des clients
+├── contracts/                        → Documents juridiques et contractuels
 │
 ├── LICENCE.md                        → Conditions d’utilisation et cadre légal (FR)
-├── LICENSE.md                        → Terms of use and legal Framework
+├── LICENSE.md                        → Terms of use and legal framework (EN)
 │
 └── docs/
     ├── README_FR.md                  → Documentation générale du système
@@ -257,25 +215,6 @@ sans effet de bord global.
 
 ---
 
-## Structure du projet (vue conceptuelle)
-
-L’arborescence reflète directement les responsabilités du système :  
-
-`engine/`        → moteurs d’exécution et logique métier  
-`clients/`       → configuration client (un fichier par client)  
-`batch_clients/` → définitions clients batch  
-`data/`          → données opérationnelles immuables  
-`docs/`          → spécifications internes (ex : format CSV)  
-`tools/`         → outils de réconciliation et d’export  
-`exports/`       → artefacts comptables générés  
-`downloads/`     → archives de factures
-
-
-Chaque dossier existe pour une seule raison précise.  
-Tout couplage transversal est volontairement évité.
-
----
-
 ## Modèle d’exécution
 
 Le système fonctionne selon un cycle fermé et reproductible :  
@@ -316,23 +255,21 @@ opérationnels dérivés des factures émises.
 
 ### Outil d’onboarding client
 
-`engine/build_json.php` transforme les données issues du formulaire  
-d’onboarding en configuration client interne utilisée par le pipeline  
-d’automatisation.
+Un composant dédié transforme les données issues du formulaire d’onboarding  
+en configuration client interne, utilisée par le système d’automatisation.
 
-Lors du traitement, le script :  
+Lors du traitement :  
 
-- génère un `client_id` unique  
-- crée la configuration client  
-- prépare la définition batch du client  
-- initialise le suivi des paiements  
-- archive le dossier d’onboarding traité
+- génération d’un identifiant client unique  
+- création de la configuration client  
+- préparation de la configuration batch associée  
+- initialisation du suivi des paiements  
+- archivage des données d’onboarding traitées
 
 Cette étape intervient strictement en phase de préparation  
 et n’interfère pas avec le cycle d’exécution mensuel.
 
-
-Le système ne devine jamais une information manquante.
+Le système ne déduit jamais une information manquante.
 
 ---
 
@@ -362,23 +299,21 @@ ni de traitement spécial hors moteur.
 
 ### Point d’entrée — dépôt CSV client
 
-Le fichier CSV mensuel est déposé par le client via un formulaire  
-d’upload dédié, accessible uniquement par lien sécurisé individuel  
-transmis après validation contractuelle.
+Le fichier CSV mensuel est déposé par le client via un formulaire d’upload dédié,  
+accessible uniquement via un lien sécurisé individuel transmis après validation contractuelle.
 
 Le point d’entrée :  
 
 - accepte uniquement des fichiers CSV  
 - met à disposition un modèle CSV de référence téléchargeable  
-- stocke le fichier dans le répertoire structuré `inbox_batch/`  
+- stocke le fichier dans un système de stockage interne structuré  
 - applique une règle d’unicité de dépôt par client et par période  
 - conserve le fichier pour validation stricte en aval
 
 Le CSV déposé est traité comme une **source brute de données de facturation**  
 et n’est jamais considéré comme une facture finale.
 
-Il est ensuite validé et consommé exclusivement par `run_batch.php`  
-dans le cadre du pipeline batch standard.
+Il est ensuite validé et traité exclusivement dans le cadre du workflow d’automatisation batch.
 
 ---
 
