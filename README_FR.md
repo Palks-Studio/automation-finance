@@ -94,7 +94,7 @@ et non comme un module externe ou optionnel.
 ## Structure du projet
 
 ```
-automation_finance/
+automation-system/
 │
 ├── engine/                           → Moteur d’automatisation (facturation, génération, traitement)
 ├── data/                             → Stockage interne des données (clients, factures, suivi)
