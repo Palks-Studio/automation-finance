@@ -122,6 +122,29 @@ automation-system/
 ```
 
 
+```
+palks-studio.com/
+├── library/
+│   ├── onboarding-client-fr.html         → Génération contrat + configuration client (FR)
+│   ├── onboarding-client-en.html         → Contract generation + client configuration (EN)
+│   ├── service-agreement-fr.html         → Template de contrat (FR)
+│   ├── service-agreement-en.html         → Contract template (EN)
+│   ├── import-clients-fr.html            → Formulaire d’envoi CSV client (FR)
+│   ├── import-clients-en.html            → Client CSV upload form (EN)
+│   └── invoice-layout.html               → Template HTML de facture (FR) / Invoice HTML template (EN)
+│
+├── contract-builder.php                  → Backend génération PDF (FR) / PDF generation backend (EN)
+├── process-import.php                    → Moteur de traitement du formulaire CSV (FR) / CSV upload form processing engine (EN)
+│
+├── secure_downloads/
+│   └── access.php                        → Point d'accès aux téléchargements batch (FR) / Batch download access endpoint (EN)
+│
+├── temp_tokens/
+├── activity.log                          → Journal des téléchargements réels (FR) / Download activity log (EN)
+└── secure_tokens.json                    → Stockage des tokens de téléchargement (FR) / Download token storage (EN)
+```
+
+
 ---
 
 ## Ce que ce dépôt est (et n’est pas)
