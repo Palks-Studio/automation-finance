@@ -139,9 +139,9 @@ palks-studio.com/
 ├── secure_downloads/
 │   └── access.php                        → Point d'accès aux téléchargements batch (FR) / Batch download access endpoint (EN)
 │
-├── temp_tokens/
-├── activity.log                          → Journal des téléchargements réels (FR) / Download activity log (EN)
-└── secure_tokens.json                    → Stockage des tokens de téléchargement (FR) / Download token storage (EN)
+└── temp_tokens/
+    ├── activity.log                      → Journal des téléchargements réels (FR) / Download activity log (EN)
+    └── secure_tokens.json                → Stockage des tokens de téléchargement (FR) / Download token storage (EN)
 ```
 
 
